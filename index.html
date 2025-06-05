@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Store - Halaman Utama</title>
+    <!-- Tailwind CSS CDN untuk styling yang modern dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter dari Google Fonts untuk tipografi yang bersih -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Mengatur font dasar untuk seluruh body */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth; /* Efek scroll halus untuk navigasi */
+        }
+        /* Efek hover kustom untuk kartu produk */
+        .product-card-hover {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .product-card-hover:hover {
+            transform: translateY(-8px) rotateZ(1deg); /* Sedikit naik dan miring */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Bayangan lebih dalam */
+        }
+
+        /* Animasi fade-in untuk teks hero section */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        /* Animasi berkedip untuk promo code */
+        @keyframes pulse-light {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-light {
+            animation: pulse-light 2s infinite;
+        }
+
+        /* Gaya dasar untuk loading spinner */
+        #loading-spinner {
+            background-color: rgba(0, 0, 0, 0.6); /* Overlay sedikit lebih gelap */
+            position: fixed; /* Tetap di tempat saat menggulir */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001; /* Pastikan di atas elemen lain */
+            color: white;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Bagian Header Utama -->
+    <header class="relative bg-gradient-to-br from-purple-700 to-indigo-800 text-white py-8 md:py-12 overflow-hidden rounded-b-[4rem] shadow-2xl">
+        <!-- Gambar Latar Belakang/Efek untuk Header -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-20 z-0" style="background-image: url('https://placehold.co/1920x1080/6D28D9/F9FAFB?text=Fashion+Collection');"></div>
+        <div class="relative z-10 container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo Toko -->
+            <a href="#" class="text-4xl font-extrabold tracking-widest text-yellow-300 px-4 py-2 rounded-xl bg-white bg-opacity-15 backdrop-filter backdrop-blur-md shadow-lg transition duration-300 hover:scale-105">Me Store</a>
+
+            <!-- Navigasi (tersembunyi di mobile, terlihat di desktop) -->
+            <nav class="hidden md:flex space-x-10 text-lg">
+                <a href="#" class="hover:text-yellow-300 transition duration-300 transform hover:scale-105">Beranda</a>
+                <a href="#products" class="hover:text-yellow-300 transition duration-300 transform hover:scale-105">Produk</a>
+                <a href="#about" class="hover:text-yellow-300 transition duration-300 transform hover:scale-105">Tentang Kami</a>
+                <a href="#contact" class="hover:text-yellow-300 transition duration-300 transform hover:scale-105">Kontak</a>
+            </nav>
+
+            <!-- Ikon Keranjang Belanja dan Hamburger Menu untuk Mobile -->
+            <div class="flex items-center space-x-6">
+                <button class="p-3 rounded-full hover:bg-white hover:bg-opacity-25 transition duration-300 shadow-md">
+                    <!-- Ikon Keranjang Belanja SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </button>
+                <!-- Tombol Hamburger untuk menu mobile -->
+                <button class="md:hidden p-3 rounded-md hover:bg-white hover:bg-opacity-25 transition duration-300 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Konten Hero Section (Jumbotron) -->
+        <div class="relative z-10 container mx-auto px-4 mt-20 md:mt-32 text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight tracking-tight mb-6 animate-fade-in-up drop-shadow-lg">
+                Temukan Gaya Unikmu di <span class="text-yellow-300">Me Store</span>
+            </h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10 opacity-95 animate-fade-in">
+                Kurasi fashion dan aksesori terkini dengan kualitas premium untuk setiap ekspresi dirimu.
+            </p>
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold py-4 px-10 rounded-full shadow-xl transform hover:scale-105 transition duration-300 ease-in-out text-xl group">
+                Jelajahi Koleksi Sekarang
+                <span class="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-2">→</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Bagian Produk Unggulan -->
+    <section id="products" class="container mx-auto px-4 py-20">
+        <h2 class="text-5xl font-extrabold text-center mb-16 text-gray-900">Produk Unggulan Kami</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            <!-- Kartu Produk 1 -->
+            <div class="bg-white rounded-2xl shadow-xl product-card-hover border border-gray-100 p-2">
+                <img src="https://placehold.co/600x400/F0F0F0/333333?text=Sweater+Kashmir" alt="Sweater Kashmir" class="w-full h-64 object-cover object-center rounded-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/666666?text=Gambar+Tidak+Tersedia';">
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900">Sweater Kashmir Hangat</h3>
+                    <p class="text-purple-600 font-extrabold text-xl mb-4">Rp 350.000</p>
+                    <div id="product-description-1" class="text-md text-gray-700 mb-4 h-16 overflow-hidden leading-snug">
+                        Sweater premium dari wol Kashmir, sangat lembut dan nyaman. Cocok untuk musim dingin.
+                    </div>
+                    <!-- Tombol untuk menghasilkan deskripsi menggunakan LLM -->
+                    <button id="generate-desc-btn-1" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition duration-300 mb-3 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        </svg>
+                        Deskripsi AI
+                    </button>
+                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-md hover:shadow-lg" onclick="addToCart('Sweater Kashmir Hangat')">
+                        Tambahkan ke Keranjang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Produk 2 -->
+            <div class="bg-white rounded-2xl shadow-xl product-card-hover border border-gray-100 p-2">
+                <img src="https://placehold.co/600x400/F0F0F0/333333?text=Jeans+Slim+Fit" alt="Jeans Slim Fit" class="w-full h-64 object-cover object-center rounded-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/666666?text=Gambar+Tidak+Tersedia';">
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900">Jeans Denim Slim Fit</h3>
+                    <p class="text-purple-600 font-extrabold text-xl mb-4">Rp 280.000</p>
+                    <div id="product-description-2" class="text-md text-gray-700 mb-4 h-16 overflow-hidden leading-snug">
+                        Jeans denim premium dengan potongan slim fit yang modern dan nyaman. Desain klasik, mudah dipadukan.
+                    </div>
+                    <button id="generate-desc-btn-2" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition duration-300 mb-3 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        </svg>
+                        Deskripsi AI
+                    </button>
+                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-md hover:shadow-lg" onclick="addToCart('Jeans Denim Slim Fit')">
+                        Tambahkan ke Keranjang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Produk 3 -->
+            <div class="bg-white rounded-2xl shadow-xl product-card-hover border border-gray-100 p-2">
+                <img src="https://placehold.co/600x400/F0F0F0/333333?text=Tas+Kulit" alt="Tas Kulit Premium" class="w-full h-64 object-cover object-center rounded-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/666666?text=Gambar+Tidak+Tersedia';">
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900">Tas Kulit Premium</h3>
+                    <p class="text-purple-600 font-extrabold text-xl mb-4">Rp 750.000</p>
+                    <div id="product-description-3" class="text-md text-gray-700 mb-4 h-16 overflow-hidden leading-snug">
+                        Tas tangan elegan dari kulit asli dengan desain minimalis dan fungsional. Pilihan tepat untuk gaya berkelas.
+                    </div>
+                    <button id="generate-desc-btn-3" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition duration-300 mb-3 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        </svg>
+                        Deskripsi AI
+                    </button>
+                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-md hover:shadow-lg" onclick="addToCart('Tas Kulit Premium')">
+                        Tambahkan ke Keranjang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Produk 4 -->
+            <div class="bg-white rounded-2xl shadow-xl product-card-hover border border-gray-100 p-2">
+                <img src="https://placehold.co/600x400/F0F0F0/333333?text=Sepatu+Sneakers" alt="Sepatu Sneakers" class="w-full h-64 object-cover object-center rounded-xl mb-4" onerror="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/666666?text=Gambar+Tidak+Tersedia';">
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900">Sepatu Sneakers Urban</h3>
+                    <p class="text-purple-600 font-extrabold text-xl mb-4">Rp 499.000</p>
+                    <div id="product-description-4" class="text-md text-gray-700 mb-4 h-16 overflow-hidden leading-snug">
+                        Sepatu sneakers modern dengan sol nyaman, cocok untuk gaya kasual perkotaan. Desain trendi, ringan dipakai.
+                    </div>
+                    <button id="generate-desc-btn-4" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition duration-300 mb-3 shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        </svg>
+                        Deskripsi AI
+                    </button>
+                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-md hover:shadow-lg" onclick="addToCart('Sepatu Sneakers Urban')">
+                        Tambahkan ke Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Kategori Produk -->
+    <section class="bg-indigo-100 py-20 rounded-b-[4rem] mx-4 shadow-xl">
+        <h2 class="text-5xl font-extrabold text-center mb-16 text-gray-900">Jelajahi Kategori Pilihan</h2>
+        <div class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+            <a href="#" class="block p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-3 transition duration-300 ease-in-out border-b-4 border-indigo-300 hover:border-purple-500">
+                <div class="text-6xl mb-6">👚</div> <!-- Ikon Pakaian Wanita (emoji) -->
+                <p class="text-xl font-bold text-gray-800">Pakaian Wanita</p>
+            </a>
+            <a href="#" class="block p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-3 transition duration-300 ease-in-out border-b-4 border-indigo-300 hover:border-purple-500">
+                <div class="text-6xl mb-6">👕</div> <!-- Ikon Pakaian Pria (emoji) -->
+                <p class="text-xl font-bold text-gray-800">Pakaian Pria</p>
+            </a>
+            <a href="#" class="block p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-3 transition duration-300 ease-in-out border-b-4 border-indigo-300 hover:border-purple-500">
+                <div class="text-6xl mb-6">💍</div> <!-- Ikon Aksesori (emoji) -->
+                <p class="text-xl font-bold text-gray-800">Aksesori</p>
+            </a>
+            <a href="#" class="block p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-3 transition duration-300 ease-in-out border-b-4 border-indigo-300 hover:border-purple-500">
+                <div class="text-6xl mb-6">👟</div> <!-- Ikon Sepatu (emoji) -->
+                <p class="text-xl font-bold text-gray-800">Sepatu</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Bagian Call to Action / Banner Promosi -->
+    <section class="bg-purple-800 text-white py-24 mt-20 rounded-t-[4rem] mx-4 shadow-2xl">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-5xl md:text-6xl font-extrabold mb-8 leading-tight drop-shadow-md">
+                Diskon Spesial 20% untuk Anda!
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 opacity-95">
+                Gunakan kode <span class="font-extrabold text-yellow-300 animate-pulse-light text-3xl md:text-4xl">MESTORE2024</span> saat checkout untuk pembelian pertama.
+            </p>
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold py-5 px-12 rounded-full shadow-xl transform hover:scale-105 transition duration-300 ease-in-out text-2xl group">
+                Mulai Belanja Sekarang
+                <span class="ml-3 inline-block transition-transform duration-300 group-hover:translate-x-3">→</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Bagian Tentang Kami (Ringkas) -->
+    <section id="about" class="container mx-auto px-4 py-20">
+        <h2 class="text-5xl font-extrabold text-center mb-16 text-gray-900">Siapa Kami? Me Store.</h2>
+        <div class="max-w-4xl mx-auto text-center text-gray-700 leading-relaxed text-lg">
+            <p class="mb-6">
+                Me Store didirikan pada tahun 2024 dengan visi untuk menjadi destinasi utama bagi Anda yang mencari gaya pribadi tanpa kompromi pada kualitas. Kami percaya bahwa fashion adalah bentuk ekspresi diri, dan setiap item dalam koleksi kami dipilih dengan cermat untuk memastikan Anda tampil percaya diri dan menawan.
+            </p>
+            <p>
+                Dari tren terkini hingga klasik yang tak lekang oleh waktu, kami menghadirkan koleksi pakaian, aksesori, dan sepatu yang dirancang untuk melengkapi setiap momen dalam hidup Anda. Komitmen kami adalah memberikan produk terbaik dan pengalaman belanja yang tak terlupakan.
+            </p>
+        </div>
+    </section>
+
+    <!-- Bagian Hubungi Kami (Ringkas) -->
+    <section id="contact" class="bg-gray-100 py-20 rounded-t-[4rem] mx-4 shadow-xl">
+        <h2 class="text-5xl font-extrabold text-center mb-16 text-gray-900">Butuh Bantuan? Hubungi Kami!</h2>
+        <div class="max-w-xl mx-auto px-4 text-center text-gray-700 text-lg">
+            <p class="mb-6">Tim kami siap membantu Anda dengan pertanyaan apapun. Jangan ragu untuk menghubungi kami melalui saluran di bawah ini.</p>
+            <p class="mb-3">Email: <a href="mailto:support@mestore.com" class="text-purple-700 hover:text-purple-900 font-semibold hover:underline transition duration-300">support@mestore.com</a></p>
+            <p class="mb-6">Telepon: <a href="tel:+6281234567890" class="text-purple-700 hover:text-purple-900 font-semibold hover:underline transition duration-300">+62 812 3456 7890</a></p>
+            <p class="text-md opacity-80">Jam Operasional: Senin - Jumat, 09:00 - 18:00 WIB</p>
+        </div>
+    </section>
+
+    <!-- Bagian Footer -->
+    <footer class="bg-gray-950 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-5 text-2xl font-bold text-yellow-300">Me Store</p>
+            <div class="flex justify-center space-x-8 mb-6">
+                <a href="#" class="text-gray-300 hover:text-purple-400 transition duration-300 text-lg">Facebook</a>
+                <a href="#" class="text-gray-300 hover:text-purple-400 transition duration-300 text-lg">Instagram</a>
+                <a href="#" class="text-gray-300 hover:text-purple-400 transition duration-300 text-lg">Twitter</a>
+            </div>
+            <p class="text-md opacity-80">&copy; 2024 Me Store. Hak Cipta Dilindungi Undang-Undang.</p>
+            <p class="text-sm mt-3 opacity-60">Curated with passion, styled for you.</p>
+        </div>
+    </footer>
+
+    <!-- Kotak Pesan (menggantikan alert) -->
+    <div id="message-box" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-green-600 text-white px-7 py-4 rounded-xl shadow-2xl opacity-0 transition-opacity duration-300 ease-out" style="z-index: 1000;">
+        Produk telah ditambahkan ke keranjang!
+    </div>
+    <!-- Loading Spinner untuk generasi LLM -->
+    <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+        <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-white"></div>
+        <div class="ml-5 text-white text-xl">Membangkitkan deskripsi...</div>
+    </div>
+
+    <!-- Chatbot Floating Action Button -->
+    <button id="chat-fab" class="fixed bottom-8 right-8 bg-purple-700 text-white p-5 rounded-full shadow-xl hover:bg-purple-800 transition duration-300 transform hover:scale-110 z-50">
+        <!-- Ikon Pesan/Chat SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div id="chat-window" class="fixed bottom-28 right-8 w-80 md:w-96 h-[400px] bg-white rounded-xl shadow-2xl flex flex-col hidden z-50 border border-gray-200">
+        <!-- Chat Header -->
+        <div class="bg-purple-700 text-white p-4 rounded-t-xl flex justify-between items-center shadow-md">
+            <h3 class="font-bold text-lg">Asisten Me Store ✨</h3>
+            <button id="close-chat-btn" class="text-white hover:text-gray-200 p-1 rounded-full hover:bg-white hover:bg-opacity-10 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Chat Messages Area -->
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 text-sm bg-gray-50">
+            <!-- Pesan awal dari bot -->
+            <div class="flex justify-start">
+                <div class="bg-gray-200 text-gray-800 p-3 rounded-xl rounded-bl-none max-w-[85%] shadow-sm">
+                    Halo! Saya Asisten Me Store. Ada yang bisa saya bantu terkait produk atau layanan kami? ✨
+                </div>
+            </div>
+        </div>
+        <!-- Chat Input Area -->
+        <div class="p-4 border-t border-gray-200 flex items-center bg-white rounded-b-xl">
+            <input type="text" id="chat-input" placeholder="Ketik pesan Anda..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-base">
+            <button id="send-chat-btn" class="ml-3 bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition duration-300 shadow-md">
+                <!-- Ikon Kirim SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // Fungsi untuk menampilkan pesan "Produk ditambahkan ke keranjang!"
+        function addToCart(productName) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = `${productName} telah ditambahkan ke keranjang!`;
+            messageBox.classList.remove('opacity-0');
+            messageBox.classList.add('opacity-100');
+
+            // Sembunyikan pesan setelah 3 detik
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100');
+                messageBox.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        // --- Integrasi LLM untuk Deskripsi Produk ---
+        // Array untuk menyimpan referensi tombol dan elemen deskripsi untuk setiap produk
+        const productElements = [
+            { btn: document.getElementById('generate-desc-btn-1'), desc: document.getElementById('product-description-1'), name: "Sweater Kashmir Hangat" },
+            { btn: document.getElementById('generate-desc-btn-2'), desc: document.getElementById('product-description-2'), name: "Jeans Denim Slim Fit" },
+            { btn: document.getElementById('generate-desc-btn-3'), desc: document.getElementById('product-description-3'), name: "Tas Kulit Premium" },
+            { btn: document.getElementById('generate-desc-btn-4'), desc: document.getElementById('product-description-4'), name: "Sepatu Sneakers Urban" }
+        ];
+
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Loop melalui setiap produk untuk menambahkan event listener
+        productElements.forEach(item => {
+            if (item.btn) {
+                item.btn.addEventListener('click', async () => {
+                    const productName = item.name;
+                    const prompt = `Buat deskripsi singkat untuk produk bernama "${productName}" untuk website e-commerce. Fokus pada kehangatan, kenyamanan, kualitas premium, dan sedikit tentang gaya. Maksimal 30 kata.`;
+
+                    loadingSpinner.classList.remove('hidden'); // Tampilkan spinner
+
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // API key akan disediakan secara otomatis
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            item.desc.textContent = text; // Perbarui deskripsi
+                        } else {
+                            item.desc.textContent = 'Gagal menghasilkan deskripsi. Silakan coba lagi.';
+                            console.error('Gagal menghasilkan deskripsi dari LLM:', result);
+                        }
+                    } catch (error) {
+                        item.desc.textContent = 'Terjadi kesalahan saat menghubungi API.';
+                        console.error('Error saat mengambil dari API LLM:', error);
+                    } finally {
+                        loadingSpinner.classList.add('hidden'); // Sembunyikan spinner
+                    }
+                });
+            }
+        });
+
+
+        // --- Integrasi Chatbot LLM ---
+        const chatFab = document.getElementById('chat-fab');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChatBtn = document.getElementById('close-chat-btn');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+
+        chatFab.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatInput.focus(); // Fokuskan input saat jendela dibuka
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+        });
+
+        sendChatBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            if (userMessage === '') return;
+
+            addMessage(userMessage, 'user');
+            chatInput.value = '';
+
+            const botLoadingMessageDiv = addMessage('...', 'bot', true); // Tambah indikator loading
+
+            try {
+                const prompt = `Anda adalah asisten pelanggan untuk toko e-commerce bernama "Me Store". Jawab pertanyaan pelanggan dengan ramah, informatif, dan ringkas. Fokus pada informasi umum seperti pengiriman, pengembalian, jam operasional, atau detail produk umum yang bisa Anda tebak dari nama toko dan produk fashion. Jika tidak tahu jawabannya, katakan bahwa Anda akan meneruskan ke tim support.
+
+                Contoh info yang bisa Anda berikan:
+                - Pengiriman: Tersedia pengiriman ke seluruh Indonesia, estimasi 3-7 hari kerja.
+                - Pengembalian: Produk bisa dikembalikan dalam 7 hari setelah diterima, syarat & ketentuan berlaku (produk harus dalam kondisi asli).
+                - Jam Operasional: Senin-Jumat, 09:00-18:00 WIB.
+
+                Pertanyaan pelanggan: "${userMessage}"`;
+
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                let botResponse = 'Maaf, saya kesulitan memahami pertanyaan Anda. Bisakah Anda mengulanginya?';
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    botResponse = result.candidates[0].content.parts[0].text;
+                }
+
+                updateMessage(botLoadingMessageDiv, botResponse); // Update dengan respons bot
+            } catch (error) {
+                console.error('Error saat memanggil LLM untuk chatbot:', error);
+                updateMessage(botLoadingMessageDiv, 'Maaf, terjadi kesalahan. Silakan coba lagi nanti, atau hubungi tim support kami.');
+            }
+        }
+
+        function addMessage(text, sender, isPending = false) {
+            const messageDiv = document.createElement('div');
+            const messageBubble = document.createElement('div');
+
+            if (sender === 'user') {
+                messageDiv.classList.add('flex', 'justify-end');
+                messageBubble.classList.add('bg-purple-500', 'text-white', 'p-3', 'rounded-xl', 'rounded-br-none', 'max-w-[85%]');
+            } else {
+                messageDiv.classList.add('flex', 'justify-start');
+                messageBubble.classList.add('bg-gray-200', 'text-gray-800', 'p-3', 'rounded-xl', 'rounded-bl-none', 'max-w-[85%]');
+                if (isPending) {
+                    messageBubble.classList.add('animate-pulse');
+                }
+            }
+            messageBubble.textContent = text;
+            messageDiv.appendChild(messageBubble);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            return messageBubble;
+        }
+
+        function updateMessage(messageBubbleElement, newText) {
+            if (messageBubbleElement) {
+                messageBubbleElement.textContent = newText;
+                messageBubbleElement.classList.remove('animate-pulse');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
